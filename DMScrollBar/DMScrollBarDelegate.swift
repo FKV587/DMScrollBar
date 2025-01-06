@@ -29,9 +29,13 @@ public extension DMScrollBarDelegate {
     func headerTitle(in tableView: UITableView, forOffset offset: CGFloat) -> String? {
         guard let section = sectionIndex(in: tableView, forOffset: offset) else { return nil }
 
-        return tableView.dataSource?.tableView?(tableView, titleForHeaderInSection: section) ??
+        if #available(iOS 14.0, *) {
+            return tableView.dataSource?.tableView?(tableView, titleForHeaderInSection: section) ??
             tableView.headerView(forSection: section)?.textLabel?.text ??
             (tableView.headerView(forSection: section)?.contentConfiguration as? UIListContentConfiguration)?.text
+        } else {
+            return tableView.headerView(forSection: section)?.textLabel?.text
+        }
     }
 
     /// This is a convenience method to get section index for specified table view content offset
